@@ -1,0 +1,6 @@
+{
+  "dbType": "sqlite3",
+  "dbLocation": "development.sqlite",
+  "listenAddress": "127.0.0.1",
+  "listenPort": 14740
+}

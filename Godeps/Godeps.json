@@ -1,0 +1,33 @@
+{
+	"ImportPath": "uber/uberalls",
+	"GoVersion": "go1.4",
+	"Deps": [
+		{
+			"ImportPath": "github.com/go-sql-driver/mysql",
+			"Comment": "v1.2-26-g9543750",
+			"Rev": "9543750295406ef070f7de8ae9c43ccddd44e15e"
+		},
+		{
+			"ImportPath": "github.com/jinzhu/gorm",
+			"Rev": "52ba1858c31dcbe1573f46f994d3cdf334729ff4"
+		},
+		{
+			"ImportPath": "github.com/lib/pq/hstore",
+			"Rev": "2fe70547fcfbd6deedadd4af3702af16c0297723"
+		},
+		{
+			"ImportPath": "github.com/mattn/go-sqlite3",
+			"Rev": "da2bf8a0f356364fb8189a5a276b5acf77839d30"
+		},
+		{
+			"ImportPath": "github.com/onsi/ginkgo",
+			"Comment": "v1.1.0-40-ge573630",
+			"Rev": "e57363034d6f4d61cd9ef0b6917f69ad03977914"
+		},
+		{
+			"ImportPath": "github.com/onsi/gomega",
+			"Comment": "v1.0-30-g982c859",
+			"Rev": "982c859aeeffd81ab8717403fb03c379b6c92b5f"
+		}
+	]
+}

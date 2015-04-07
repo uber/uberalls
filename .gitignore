@@ -1,0 +1,9 @@
+Godeps/_workspace
+uberalls
+*.test
+
+# Fake source dir for jenkins
+src/
+*.sqlite
+coverage.out
+*.xml
