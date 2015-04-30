@@ -35,6 +35,15 @@ revision on differentials.
 
 [Phabricator Jenkins Plugin]: https://github.com/uber/phabricator-jenkins-plugin
 
+On differentials, the delta in coverage is calculated by taking the base commit
+(from conduit metadata) and comparing that to the current coverage amount.
+
+In order to have a baseline to compare against, you must also have jenkins build
+your project on your mainline branch ("master" by default). You can either
+create a separate job, or enable SCM polling under Build Triggers:
+
+![scm polling](/docs/scm-polling.png)
+
 ## Development
 
 Get the source
