@@ -1,4 +1,4 @@
-# uberalls [![Build Status](https://travis-ci.org/uber/uberalls.svg?branch=master)](https://travis-ci.org/uber/uberalls)
+# uberalls [![Build Status](https://travis-ci.org/uber/uberalls.svg?branch=master)](https://travis-ci.org/uber/uberalls) [![Coverage Status](https://coveralls.io/repos/uber/uberalls/badge.svg)](https://coveralls.io/r/uber/uberalls)
 
 Code coverage metric storage service. Provide coverage metrics on differentials
 with [Phabricator][] and [Jenkins][], just like [Coveralls][] does for GitHub
