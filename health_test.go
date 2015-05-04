@@ -35,7 +35,8 @@ var _ = Describe("Health handler", func() {
 		request, _ := http.NewRequest("GET", "/health", nil)
 		response = httptest.NewRecorder()
 
-		HealthHandler(response, request)
+		handler := HealthHandler{}
+		handler.ServeHTTP(response, request)
 	})
 
 	It("Should be HTTP OK", func() {

@@ -24,12 +24,13 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/jinzhu/gorm"
 	"io"
 	"log"
 	"net/http"
 	"net/url"
 	"time"
+
+	"github.com/jinzhu/gorm"
 )
 
 // Metric represents code coverage
@@ -49,6 +50,11 @@ type Metric struct {
 
 type errorResponse struct {
 	Error string `json:"error"`
+}
+
+// MetricsHandler represents a metrics handler
+type MetricsHandler struct {
+	db *gorm.DB
 }
 
 const defaultBranch = "master"
@@ -167,21 +173,21 @@ func RecordMetric(m *Metric, db *gorm.DB) error {
 
 type handler func(w http.ResponseWriter, r *http.Request)
 
-// MetricsHandler queries for coverage metrics
-func MetricsHandler(w http.ResponseWriter, r *http.Request, db *gorm.DB) {
+// NewMetricsHandler creates a new MetricsHandler
+func NewMetricsHandler(db *gorm.DB) MetricsHandler {
+	return MetricsHandler{
+		db: db,
+	}
+}
+
+// ServeHTTP handles an HTTP request for metrics
+func (h MetricsHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
 	if r.Method == "GET" {
-		handleMetricsQuery(w, r, db)
+		handleMetricsQuery(w, r, h.db)
 	} else {
-		handleMetricsSave(w, r, db)
+		handleMetricsSave(w, r, h.db)
 	}
 	return
-}
-
-// DBMetricsHandler creates a handler based on a DB connection
-func DBMetricsHandler(db *gorm.DB) handler {
-	return func(w http.ResponseWriter, r *http.Request) {
-		MetricsHandler(w, r, db)
-	}
 }

@@ -45,8 +45,8 @@ func main() {
 		log.Fatalf("Could not establish database connection: %v", err)
 	}
 	mux := http.NewServeMux()
-	mux.HandleFunc("/health", HealthHandler)
-	mux.HandleFunc("/metrics", DBMetricsHandler(db))
+	mux.Handle("/health", HealthHandler{})
+	mux.Handle("/metrics", NewMetricsHandler(db))
 
 	listenString := config.ConnectionString()
 	log.Printf("Listening on %s... ", listenString)

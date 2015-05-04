@@ -23,11 +23,12 @@ package main_test
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/jinzhu/gorm"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
 	"strings"
+
+	"github.com/jinzhu/gorm"
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
@@ -46,7 +47,8 @@ func getMetricsResponse(method string, body *strings.Reader, params string, db *
 		request, _ = http.NewRequest(method, url, body)
 	}
 	response := httptest.NewRecorder()
-	DBMetricsHandler(db)(response, request)
+	handler := NewMetricsHandler(db)
+	handler.ServeHTTP(response, request)
 	return response
 }
 

@@ -22,8 +22,11 @@ package main
 
 import "net/http"
 
-// HealthHandler handles the health endpoint
-func HealthHandler(w http.ResponseWriter, r *http.Request) {
+// HealthHandler handles HTTP requests for health
+type HealthHandler struct{}
+
+// ServeHTP handles the health endpoint
+func (h HealthHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/plain")
 	w.Write([]byte(";-)\n"))
 }
