@@ -6,4 +6,11 @@ go:
   - 1.4
   - tip
 
-script: go test -race ./...
+before_install:
+  - go get github.com/axw/gocov/gocov
+  - go get github.com/mattn/goveralls
+  - if ! go get code.google.com/p/go.tools/cmd/cover; then go get golang.org/x/tools/cmd/cover; fi
+
+script:
+  - export PATH="$PATH:$HOME/gopath/bin"
+  - make travis
