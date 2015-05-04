@@ -107,7 +107,7 @@ func ExtractMetricQuery(form url.Values) Metric {
 	return query
 }
 
-func handleMetricsQuery(w http.ResponseWriter, r *http.Request, db *gorm.DB) {
+func (mh MetricsHandler) handleMetricsQuery(w http.ResponseWriter, r *http.Request) {
 	if err := r.ParseForm(); err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		writeError(w, "error parsing params", err)
@@ -123,7 +123,7 @@ func handleMetricsQuery(w http.ResponseWriter, r *http.Request, db *gorm.DB) {
 	query := ExtractMetricQuery(r.Form)
 
 	m := new(Metric)
-	db.Where(&query).Order("timestamp desc").First(m)
+	mh.db.Where(&query).Order("timestamp desc").First(m)
 
 	if m.ID == 0 {
 		w.WriteHeader(http.StatusNotFound)
@@ -134,7 +134,7 @@ func handleMetricsQuery(w http.ResponseWriter, r *http.Request, db *gorm.DB) {
 	respondWithMetric(w, *m)
 }
 
-func handleMetricsSave(w http.ResponseWriter, r *http.Request, db *gorm.DB) {
+func (mh MetricsHandler) handleMetricsSave(w http.ResponseWriter, r *http.Request) {
 	if r.Body == nil {
 		w.WriteHeader(http.StatusBadRequest)
 		writeError(w, "no response body", errors.New("nil body"))
@@ -149,7 +149,7 @@ func handleMetricsSave(w http.ResponseWriter, r *http.Request, db *gorm.DB) {
 		return
 	}
 
-	if err := RecordMetric(m, db); err != nil {
+	if err := mh.RecordMetric(m); err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		writeError(w, "error recording metric", err)
 	} else {
@@ -158,7 +158,7 @@ func handleMetricsSave(w http.ResponseWriter, r *http.Request, db *gorm.DB) {
 }
 
 // RecordMetric saves a Metric to the database
-func RecordMetric(m *Metric, db *gorm.DB) error {
+func (mh MetricsHandler) RecordMetric(m *Metric) error {
 	if m.Repository == "" || m.Sha == "" {
 		return errors.New("missing required field")
 	}
@@ -167,7 +167,7 @@ func RecordMetric(m *Metric, db *gorm.DB) error {
 		m.Timestamp = time.Now().Unix()
 	}
 
-	db.Create(m)
+	mh.db.Create(m)
 	return nil
 }
 
@@ -181,13 +181,13 @@ func NewMetricsHandler(db *gorm.DB) MetricsHandler {
 }
 
 // ServeHTTP handles an HTTP request for metrics
-func (h MetricsHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (mh MetricsHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
 	if r.Method == "GET" {
-		handleMetricsQuery(w, r, h.db)
+		mh.handleMetricsQuery(w, r)
 	} else {
-		handleMetricsSave(w, r, h.db)
+		mh.handleMetricsSave(w, r)
 	}
 	return
 }
