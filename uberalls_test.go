@@ -18,44 +18,23 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-package main
+package main_test
 
 import (
-	"log"
 	"net/http"
-	"os"
+
+	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/gomega"
+	. "github.com/uber/uberalls"
 )
 
-var config Config
+var _ = Describe("Uberalls main", func() {
+	var mux *http.ServeMux
+	BeforeEach(func() {
+		mux = MakeServeMux()
+	})
 
-func init() {
-	log.Println("Configuring...")
-	config = Config{}
-	LoadConfig(&config, os.Getenv("UBERALLS_CONFIG"))
-	LoadConfig(&config, os.Getenv("UBERALLS_SECRETS"))
-}
-
-// MakeServeMux instantiates an http ServeMux for the server
-func MakeServeMux() *http.ServeMux {
-	db, err := config.DB()
-	if err != nil {
-		log.Fatalf("Unable to initialize DB connection: %v", err)
-	}
-
-	if err := config.Automigrate(); err != nil {
-		log.Fatalf("Could not establish database connection: %v", err)
-	}
-	mux := http.NewServeMux()
-	mux.Handle("/health", HealthHandler{})
-	mux.Handle("/metrics", NewMetricsHandler(db))
-
-	return mux
-}
-
-func main() {
-	mux := MakeServeMux()
-	listenString := config.ConnectionString()
-	log.Printf("Listening on %s... ", listenString)
-
-	log.Fatal(http.ListenAndServe(listenString, mux))
-}
+	It("should exist", func() {
+		Expect(mux).ToNot(BeNil())
+	})
+})
