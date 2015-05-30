@@ -31,15 +31,42 @@ import (
 
 var _ = Describe("Health handler", func() {
 	var response *httptest.ResponseRecorder
-	BeforeEach(func() {
+	var c Config
+
+	JustBeforeEach(func() {
 		request, _ := http.NewRequest("GET", "/health", nil)
 		response = httptest.NewRecorder()
 
-		handler := HealthHandler{}
+		db, err := c.DB()
+		Expect(err).ToNot(HaveOccurred())
+
+		handler := NewHealthHandler(db)
 		handler.ServeHTTP(response, request)
 	})
 
-	It("Should be HTTP OK", func() {
-		Expect(response.Code).To(Equal(http.StatusOK))
+	Context("With a valid DB connection", func() {
+		BeforeEach(func() {
+			c = Config{
+				DBType:     "sqlite3",
+				DBLocation: "test.sqlite",
+			}
+		})
+
+		It("Should be HTTP OK", func() {
+			Expect(response.Code).To(Equal(http.StatusOK))
+		})
+	})
+
+	Context("With an invalid DB connection", func() {
+		BeforeEach(func() {
+			c = Config{
+				DBType:     "mysql",
+				DBLocation: ":1111",
+			}
+		})
+
+		It("should not be OK", func() {
+			Expect(response.Code).To(Equal(http.StatusInternalServerError))
+		})
 	})
 })

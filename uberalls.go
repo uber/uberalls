@@ -46,7 +46,7 @@ func MakeServeMux() *http.ServeMux {
 		log.Fatalf("Could not establish database connection: %v", err)
 	}
 	mux := http.NewServeMux()
-	mux.Handle("/health", HealthHandler{})
+	mux.Handle("/health", NewHealthHandler(db))
 	mux.Handle("/metrics", NewMetricsHandler(db))
 
 	return mux
