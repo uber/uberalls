@@ -24,13 +24,13 @@
 
 html_report := coverage.html
 test := gocov test
-coverfile := cover.out
+coverfile := profile.cov
 
 test-console:
 	$(test) | gocov report
 
 test:
-	go test -coverprofile $(coverfile)
+	go test -covermode=count -coverprofile $(coverfile)
 
 testhtml: clean
 	$(test) | gocov-html > $(html_report) && open $(html_report)
