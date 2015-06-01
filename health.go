@@ -20,13 +20,29 @@
 
 package main
 
-import "net/http"
+import (
+	"net/http"
+
+	"github.com/jinzhu/gorm"
+)
 
 // HealthHandler handles HTTP requests for health
-type HealthHandler struct{}
+type HealthHandler struct {
+	db *gorm.DB
+}
+
+// NewHealthHandler instantiates a new handler for health checking
+func NewHealthHandler(db *gorm.DB) HealthHandler {
+	return HealthHandler{db: db}
+}
 
 // ServeHTP handles the health endpoint
 func (h HealthHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/plain")
+	if err := h.db.DB().Ping(); err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(err.Error()))
+		return
+	}
 	w.Write([]byte(";-)\n"))
 }
