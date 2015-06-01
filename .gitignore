@@ -7,3 +7,5 @@ src/
 *.sqlite
 coverage.out
 *.xml
+*.cov
+*.html
