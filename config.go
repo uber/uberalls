@@ -69,8 +69,18 @@ func (c Config) Automigrate() error {
 	model := new(Metric)
 	db.AutoMigrate(model)
 
-	db.Model(model).AddIndex("idx_metrics_repository_sha_timestamp", "repository", "sha", "timestamp")
-	db.Model(model).AddIndex("idx_metrics_repository_branch_timestamp", "repository", "branch", "timestamp")
+	db.Model(model).AddIndex(
+		"idx_metrics_repository_sha_timestamp",
+		"repository",
+		"sha",
+		"timestamp",
+	)
+	db.Model(model).AddIndex(
+		"idx_metrics_repository_branch_timestamp",
+		"repository",
+		"branch",
+		"timestamp",
+	)
 	return nil
 }
 
