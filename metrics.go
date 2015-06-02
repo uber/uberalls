@@ -113,6 +113,7 @@ func (mh MetricsHandler) handleMetricsQuery(w http.ResponseWriter, r *http.Reque
 		writeError(w, "error parsing params", err)
 		return
 	}
+	log.Printf("Handling incoming request: %s", r.Form)
 
 	if len(r.Form["repository"]) < 1 {
 		w.WriteHeader(http.StatusBadRequest)
@@ -127,7 +128,7 @@ func (mh MetricsHandler) handleMetricsQuery(w http.ResponseWriter, r *http.Reque
 
 	if m.ID == 0 {
 		w.WriteHeader(http.StatusNotFound)
-		writeError(w, "no rows found", errors.New("nope"))
+		writeError(w, "no rows found", errors.New("-"))
 		return
 	}
 
@@ -148,6 +149,7 @@ func (mh MetricsHandler) handleMetricsSave(w http.ResponseWriter, r *http.Reques
 		writeError(w, "unable to decode body", err)
 		return
 	}
+	log.Printf("Recording metric %v", m)
 
 	if err := mh.RecordMetric(m); err != nil {
 		w.WriteHeader(http.StatusBadRequest)
