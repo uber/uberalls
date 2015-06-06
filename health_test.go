@@ -61,7 +61,7 @@ var _ = Describe("Health handler", func() {
 		BeforeEach(func() {
 			c = Config{
 				DBType:     "mysql",
-				DBLocation: ":1111",
+				DBLocation: ":-1",
 			}
 		})
 
