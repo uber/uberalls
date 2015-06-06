@@ -18,7 +18,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-.PHONY: test test-console lint testhtml clean travis
 
 .DEFAULT_GOAL := test-console
 
@@ -40,3 +39,5 @@ clean:
 
 travis: test
 	goveralls -coverprofile=$(coverfile) -service=travis-ci
+
+.PHONY: test test-console lint testhtml clean travis
