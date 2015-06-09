@@ -39,6 +39,10 @@ var _ = Describe("Uberalls main", func() {
 		Expect(mux).ToNot(BeNil())
 	})
 
+	It("should configure", func() {
+		Expect(Configure()).ToNot(HaveOccurred())
+	})
+
 	Context("with environment", func() {
 		var oldConfig string
 
@@ -52,7 +56,7 @@ var _ = Describe("Uberalls main", func() {
 
 		It("should try loading a config", func() {
 			os.Setenv("UBERALLS_CONFIG", "aoeu")
-			Configure()
+			Expect(Configure()).To(HaveOccurred())
 		})
 	})
 })

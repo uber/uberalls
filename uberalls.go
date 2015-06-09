@@ -37,7 +37,7 @@ func init() {
 	Configure()
 }
 
-func Configure() {
+func Configure() error {
 	log.Println("Configuring...")
 	config = Config{}
 
@@ -47,7 +47,7 @@ func Configure() {
 			configPaths = append(configPaths, envValue)
 		}
 	}
-	LoadConfigs(&config, configPaths)
+	return LoadConfigs(&config, configPaths)
 }
 
 // MakeServeMux instantiates an http ServeMux for the server

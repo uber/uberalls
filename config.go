@@ -85,18 +85,20 @@ func (c Config) Automigrate() error {
 }
 
 // LoadConfigs loads from multiple config files, or default
-func LoadConfigs(c *Config, configPaths []string) {
+func LoadConfigs(c *Config, configPaths []string) error {
 	if len(configPaths) == 0 {
-		LoadConfig(c, defaultConfig)
-		return
+		return LoadConfig(c, defaultConfig)
 	}
 	for _, path := range configPaths {
-		LoadConfig(c, path)
+		if err := LoadConfig(c, path); err != nil {
+			return err
+		}
 	}
+	return nil
 }
 
 // LoadConfig loads configuration from a file into a Config type
-func LoadConfig(c *Config, configPath string) {
+func LoadConfig(c *Config, configPath string) error {
 	if configPath == "" {
 		configPath = defaultConfig
 	}
@@ -105,12 +107,13 @@ func LoadConfig(c *Config, configPath string) {
 	content, err := ioutil.ReadFile(configPath)
 	if err != nil {
 		log.Println(err)
-		return
+		return err
 	}
 
 	if err = json.Unmarshal(content, c); err != nil {
 		log.Fatal(err)
+		return err
 	}
 
-	return
+	return nil
 }
