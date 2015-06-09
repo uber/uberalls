@@ -32,7 +32,9 @@ import (
 var _ = Describe("Uberalls main", func() {
 	var mux *http.ServeMux
 	BeforeEach(func() {
-		mux = MakeServeMux()
+		config, err := Configure()
+		Expect(err).ToNot(HaveOccurred())
+		mux = MakeServeMux(config)
 	})
 
 	It("should exist", func() {
@@ -40,7 +42,8 @@ var _ = Describe("Uberalls main", func() {
 	})
 
 	It("should configure", func() {
-		Expect(Configure()).ToNot(HaveOccurred())
+		_, err := Configure()
+		Expect(err).ToNot(HaveOccurred())
 	})
 
 	Context("with environment", func() {
@@ -56,7 +59,8 @@ var _ = Describe("Uberalls main", func() {
 
 		It("should try loading a config", func() {
 			os.Setenv("UBERALLS_CONFIG", "aoeu")
-			Expect(Configure()).To(HaveOccurred())
+			_, err := Configure()
+			Expect(err).To(HaveOccurred())
 		})
 	})
 })

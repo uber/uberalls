@@ -25,19 +25,8 @@ import (
 	"net/http"
 )
 
-var configLocations = []string{
-	"UBERALLS_CONFIG",
-	"UBERALLS_SECRETS",
-}
-
-var config Config
-
-func init() {
-	Configure()
-}
-
 // MakeServeMux instantiates an http ServeMux for the server
-func MakeServeMux() *http.ServeMux {
+func MakeServeMux(config *Config) *http.ServeMux {
 	db, err := config.DB()
 	if err != nil {
 		log.Fatalf("Unable to initialize DB connection: %v", err)
@@ -54,7 +43,12 @@ func MakeServeMux() *http.ServeMux {
 }
 
 func main() {
-	mux := MakeServeMux()
+	config, err := Configure()
+	if err != nil {
+		log.Fatalf("Unable to load configuration: %s", err)
+	}
+
+	mux := MakeServeMux(config)
 	listenString := config.ConnectionString()
 	log.Printf("Listening on %s... ", listenString)
 

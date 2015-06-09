@@ -21,6 +21,8 @@
 package main_test
 
 import (
+	"os"
+
 	. "github.com/uber/uberalls"
 
 	. "github.com/onsi/ginkgo"
@@ -40,17 +42,44 @@ var _ = Describe("File loading", func() {
 	})
 
 	It("Should error on non-existent files", func() {
-		Expect(LoadConfig(c, "non-existent")).To(HaveOccurred())
+		_, err := LoadConfig(c, "non-existent")
+		Expect(err).To(HaveOccurred())
 		Expect(c.DBType).To(BeEmpty())
 	})
 
 	It("Should error on bad paths", func() {
-		Expect(LoadConfigs(c, []string{"non-existent"})).To(HaveOccurred())
+		_, err := LoadConfigs(c, []string{"non-existent"})
+		Expect(err).To(HaveOccurred())
 	})
 
 	It("Should work with good paths", func() {
-		Expect(LoadConfigs(c, []string{DefaultConfig})).ToNot(HaveOccurred())
+		_, err := LoadConfigs(c, []string{DefaultConfig})
+		Expect(err).ToNot(HaveOccurred())
 	})
+
+	It("should configure", func() {
+		_, err := Configure()
+		Expect(err).ToNot(HaveOccurred())
+	})
+
+	Context("with environment", func() {
+		var oldConfig string
+
+		BeforeEach(func() {
+			oldConfig = os.Getenv("UBERALLS_CONFIG")
+		})
+
+		AfterEach(func() {
+			os.Setenv("UBERALLS_CONFIG", oldConfig)
+		})
+
+		It("should try loading a config", func() {
+			os.Setenv("UBERALLS_CONFIG", "aoeu")
+			_, err := Configure()
+			Expect(err).To(HaveOccurred())
+		})
+	})
+
 })
 
 var _ = Describe("Database connections", func() {
