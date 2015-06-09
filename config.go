@@ -84,6 +84,17 @@ func (c Config) Automigrate() error {
 	return nil
 }
 
+// LoadConfigs loads from multiple config files, or default
+func LoadConfigs(c *Config, configPaths []string) {
+	if len(configPaths) == 0 {
+		LoadConfig(c, defaultConfig)
+		return
+	}
+	for _, path := range configPaths {
+		LoadConfig(c, path)
+	}
+}
+
 // LoadConfig loads configuration from a file into a Config type
 func LoadConfig(c *Config, configPath string) {
 	if configPath == "" {

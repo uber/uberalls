@@ -26,13 +26,28 @@ import (
 	"os"
 )
 
+var configLocations = []string{
+	"UBERALLS_CONFIG",
+	"UBERALLS_SECRETS",
+}
+
 var config Config
 
 func init() {
+	Configure()
+}
+
+func Configure() {
 	log.Println("Configuring...")
 	config = Config{}
-	LoadConfig(&config, os.Getenv("UBERALLS_CONFIG"))
-	LoadConfig(&config, os.Getenv("UBERALLS_SECRETS"))
+
+	configPaths := make([]string, 0, 2)
+	for _, env := range configLocations {
+		if envValue := os.Getenv(env); envValue != "" {
+			configPaths = append(configPaths, envValue)
+		}
+	}
+	LoadConfigs(&config, configPaths)
 }
 
 // MakeServeMux instantiates an http ServeMux for the server
