@@ -23,7 +23,6 @@ package main
 import (
 	"log"
 	"net/http"
-	"os"
 )
 
 var configLocations = []string{
@@ -35,19 +34,6 @@ var config Config
 
 func init() {
 	Configure()
-}
-
-func Configure() error {
-	log.Println("Configuring...")
-	config = Config{}
-
-	configPaths := make([]string, 0, 2)
-	for _, env := range configLocations {
-		if envValue := os.Getenv(env); envValue != "" {
-			configPaths = append(configPaths, envValue)
-		}
-	}
-	return LoadConfigs(&config, configPaths)
 }
 
 // MakeServeMux instantiates an http ServeMux for the server

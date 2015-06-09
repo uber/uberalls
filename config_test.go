@@ -40,8 +40,16 @@ var _ = Describe("File loading", func() {
 	})
 
 	It("Should error on non-existent files", func() {
-		LoadConfig(c, "non-existent")
+		Expect(LoadConfig(c, "non-existent")).To(HaveOccurred())
 		Expect(c.DBType).To(BeEmpty())
+	})
+
+	It("Should error on bad paths", func() {
+		Expect(LoadConfigs(c, []string{"non-existent"})).To(HaveOccurred())
+	})
+
+	It("Should work with good paths", func() {
+		Expect(LoadConfigs(c, []string{DefaultConfig})).ToNot(HaveOccurred())
 	})
 })
 

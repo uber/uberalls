@@ -25,6 +25,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"os"
 
 	"github.com/jinzhu/gorm"
 
@@ -32,7 +33,8 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
-const defaultConfig = "config/default.json"
+// DefaultConfig holds the default config path
+const DefaultConfig = "config/default.json"
 
 // Config holds application configuration
 type Config struct {
@@ -87,7 +89,7 @@ func (c Config) Automigrate() error {
 // LoadConfigs loads from multiple config files, or default
 func LoadConfigs(c *Config, configPaths []string) error {
 	if len(configPaths) == 0 {
-		return LoadConfig(c, defaultConfig)
+		return LoadConfig(c, "")
 	}
 	for _, path := range configPaths {
 		if err := LoadConfig(c, path); err != nil {
@@ -100,7 +102,7 @@ func LoadConfigs(c *Config, configPaths []string) error {
 // LoadConfig loads configuration from a file into a Config type
 func LoadConfig(c *Config, configPath string) error {
 	if configPath == "" {
-		configPath = defaultConfig
+		configPath = DefaultConfig
 	}
 
 	log.Print("Loading configuration from '", configPath, "'")
@@ -116,4 +118,18 @@ func LoadConfig(c *Config, configPath string) error {
 	}
 
 	return nil
+}
+
+// Configure sets up the app
+func Configure() error {
+	log.Println("Configuring...")
+	config = Config{}
+
+	configPaths := make([]string, 0, 2)
+	for _, env := range configLocations {
+		if envValue := os.Getenv(env); envValue != "" {
+			configPaths = append(configPaths, envValue)
+		}
+	}
+	return LoadConfigs(&config, configPaths)
 }
