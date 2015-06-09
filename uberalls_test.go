@@ -22,6 +22,7 @@ package main_test
 
 import (
 	"net/http"
+	"os"
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
@@ -36,5 +37,26 @@ var _ = Describe("Uberalls main", func() {
 
 	It("should exist", func() {
 		Expect(mux).ToNot(BeNil())
+	})
+
+	It("should configure", func() {
+		Expect(Configure()).ToNot(HaveOccurred())
+	})
+
+	Context("with environment", func() {
+		var oldConfig string
+
+		BeforeEach(func() {
+			oldConfig = os.Getenv("UBERALLS_CONFIG")
+		})
+
+		AfterEach(func() {
+			os.Setenv("UBERALLS_CONFIG", oldConfig)
+		})
+
+		It("should try loading a config", func() {
+			os.Setenv("UBERALLS_CONFIG", "aoeu")
+			Expect(Configure()).To(HaveOccurred())
+		})
 	})
 })

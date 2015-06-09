@@ -23,16 +23,17 @@ package main
 import (
 	"log"
 	"net/http"
-	"os"
 )
+
+var configLocations = []string{
+	"UBERALLS_CONFIG",
+	"UBERALLS_SECRETS",
+}
 
 var config Config
 
 func init() {
-	log.Println("Configuring...")
-	config = Config{}
-	LoadConfig(&config, os.Getenv("UBERALLS_CONFIG"))
-	LoadConfig(&config, os.Getenv("UBERALLS_SECRETS"))
+	Configure()
 }
 
 // MakeServeMux instantiates an http ServeMux for the server
