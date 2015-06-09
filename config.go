@@ -36,6 +36,11 @@ import (
 // DefaultConfig holds the default config path
 const DefaultConfig = "config/default.json"
 
+var configLocations = [...]string{
+	"UBERALLS_CONFIG",
+	"UBERALLS_SECRETS",
+}
+
 // Config holds application configuration
 type Config struct {
 	DBType        string
@@ -87,20 +92,20 @@ func (c Config) Automigrate() error {
 }
 
 // LoadConfigs loads from multiple config files, or default
-func LoadConfigs(c *Config, configPaths []string) error {
+func LoadConfigs(c *Config, configPaths []string) (*Config, error) {
 	if len(configPaths) == 0 {
 		return LoadConfig(c, "")
 	}
 	for _, path := range configPaths {
-		if err := LoadConfig(c, path); err != nil {
-			return err
+		if _, err := LoadConfig(c, path); err != nil {
+			return nil, err
 		}
 	}
-	return nil
+	return c, nil
 }
 
 // LoadConfig loads configuration from a file into a Config type
-func LoadConfig(c *Config, configPath string) error {
+func LoadConfig(c *Config, configPath string) (*Config, error) {
 	if configPath == "" {
 		configPath = DefaultConfig
 	}
@@ -108,28 +113,32 @@ func LoadConfig(c *Config, configPath string) error {
 	log.Print("Loading configuration from '", configPath, "'")
 	content, err := ioutil.ReadFile(configPath)
 	if err != nil {
-		log.Println(err)
-		return err
+		return nil, err
 	}
 
 	if err = json.Unmarshal(content, c); err != nil {
-		log.Fatal(err)
-		return err
+		return nil, err
 	}
 
-	return nil
+	return c, nil
 }
 
-// Configure sets up the app
-func Configure() error {
-	log.Println("Configuring...")
-	config = Config{}
-
-	configPaths := make([]string, 0, 2)
+// GetLocationsFromEnvironment returns a list of possible configuration locations
+func GetLocationsFromEnvironment() []string {
+	configPaths := make([]string, 0, len(configLocations))
 	for _, env := range configLocations {
 		if envValue := os.Getenv(env); envValue != "" {
 			configPaths = append(configPaths, envValue)
 		}
 	}
-	return LoadConfigs(&config, configPaths)
+	return configPaths
+}
+
+// Configure sets up the app
+func Configure() (*Config, error) {
+	log.Println("Configuring...")
+	config := Config{}
+
+	paths := GetLocationsFromEnvironment()
+	return LoadConfigs(&config, paths)
 }
