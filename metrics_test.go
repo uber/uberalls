@@ -162,13 +162,26 @@ var _ = Describe("/metrics handler", func() {
 })
 
 var _ = Describe("ExtractMetricsQuery", func() {
-	values := url.Values{
-		"repository": []string{"foo"},
-		"branch":     []string{"master"},
-	}
-	query := ExtractMetricQuery(values)
+	Context("When branch is specified in the query", func() {
+		values := url.Values{
+			"repository": []string{"foo"},
+			"branch":     []string{"master"},
+		}
+		query := ExtractMetricQuery(values)
 
-	It("Should extract the master branch", func() {
-		Expect(query.Branch).To(Equal("master"))
+		It("Should extract the master branch", func() {
+			Expect(query.Branch).To(Equal("master"))
+		})
+	})
+
+	Context("When no branch is specified", func() {
+		values := url.Values{
+			"repository": []string{"foo"},
+		}
+		query := ExtractMetricQuery(values)
+
+		It("Should extract the default branch", func() {
+			Expect(query.Branch).To(Equal("origin/master"))
+		})
 	})
 })

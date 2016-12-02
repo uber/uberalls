@@ -57,7 +57,7 @@ type MetricsHandler struct {
 	db *gorm.DB
 }
 
-const defaultBranch = "master"
+const defaultBranch = "origin/master"
 
 func writeError(w io.Writer, message string, err error) {
 	formattedMessage := fmt.Sprintf("%s: %v", message, err)
