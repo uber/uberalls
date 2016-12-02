@@ -133,6 +133,66 @@ var _ = Describe("/metrics handler", func() {
 		})
 	})
 
+	Context("With multiple records for a repository", func() {
+		record1 := `{
+			"repository": "test2", "packageCoverage": 38, "filesCoverage": 39,
+			"classesCoverage": 40, "methodCoverage": 41, "lineCoverage": 42,
+			"conditionalCoverage": 43, "sha": "deadbeef",
+			"timestamp": 1480636700}`
+		record2 := `{
+			"repository": "test2", "packageCoverage": 38, "filesCoverage": 39,
+			"classesCoverage": 40, "methodCoverage": 41, "lineCoverage": 42,
+			"conditionalCoverage": 46, "sha": "deadbeef",
+			"timestamp": 1480636760}`
+
+		BeforeEach(func() {
+			response = getMetricsResponse("POST", strings.NewReader(record1), "", db)
+			Expect(response.Code).To(Equal(http.StatusOK))
+			response = getMetricsResponse("POST", strings.NewReader(record2), "", db)
+			Expect(response.Code).To(Equal(http.StatusOK))
+		})
+
+		Context("Retrieving the latest metric", func() {
+			It("Should have the correct values", func() {
+				response = getMetricsResponse("GET", nil, "repository=test2&sha=deadbeef", db)
+				metric := new(Metric)
+				json.NewDecoder(response.Body).Decode(metric)
+
+				Expect(metric.Timestamp).To(Equal(int64(1480636760)))
+				Expect(metric.ConditionalCoverage).To(Equal(46.))
+			})
+		})
+
+		Context("Retrieving historical metric", func() {
+			It("Should have the correct values", func() {
+				response = getMetricsResponse("GET", nil, "repository=test2&sha=deadbeef&until=1480636730", db)
+				metric := new(Metric)
+				json.NewDecoder(response.Body).Decode(metric)
+
+				Expect(metric.Timestamp).To(Equal(int64(1480636700)))
+				Expect(metric.ConditionalCoverage).To(Equal(43.))
+			})
+		})
+
+		Context("Retrieving historical metric at exact moment", func() {
+			It("Should have the correct values", func() {
+				response = getMetricsResponse("GET", nil, "repository=test2&sha=deadbeef&until=1480636700", db)
+				metric := new(Metric)
+				json.NewDecoder(response.Body).Decode(metric)
+
+				Expect(metric.Timestamp).To(Equal(int64(1480636700)))
+				Expect(metric.ConditionalCoverage).To(Equal(43.))
+			})
+		})
+
+		Context("Retrieving from before metrics exist", func() {
+			It("Should be HTTP 404", func() {
+				response = getMetricsResponse("GET", nil, "repository=test2&sha=deadbeef&until=1480636699", db)
+				Expect(response.Code).To(Equal(http.StatusNotFound))
+			})
+		})
+	})
+
 	Context("With invalid JSON", func() {
 		badJSON := `{}`
 
