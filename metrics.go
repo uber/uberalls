@@ -57,7 +57,7 @@ type MetricsHandler struct {
 	db *gorm.DB
 }
 
-const defaultBranch = "master"
+const defaultBranch = "origin/master"
 
 func writeError(w io.Writer, message string, err error) {
 	formattedMessage := fmt.Sprintf("%s: %v", message, err)
@@ -124,7 +124,11 @@ func (mh MetricsHandler) handleMetricsQuery(w http.ResponseWriter, r *http.Reque
 	query := ExtractMetricQuery(r.Form)
 
 	m := new(Metric)
-	mh.db.Where(&query).Order("timestamp desc").First(m)
+	dbQuery := mh.db.Where(&query)
+	if len(r.Form["until"]) > 0 {
+		dbQuery = dbQuery.Where("timestamp <= ? ", r.Form["until"][0])
+	}
+	dbQuery.Order("timestamp desc").First(m)
 
 	if m.ID == 0 {
 		w.WriteHeader(http.StatusNotFound)
