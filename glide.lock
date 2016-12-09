@@ -1,0 +1,44 @@
+hash: 806b7990676ebce531a2aab79ab070717f8fc44a0841d6c00d35127cebea71ab
+updated: 2016-12-09T12:08:35.379451859+11:00
+imports:
+- name: github.com/go-sql-driver/mysql
+  version: 9543750295406ef070f7de8ae9c43ccddd44e15e
+- name: github.com/jinzhu/gorm
+  version: 52ba1858c31dcbe1573f46f994d3cdf334729ff4
+- name: github.com/lib/pq
+  version: 2fe70547fcfbd6deedadd4af3702af16c0297723
+  subpackages:
+  - hstore
+- name: github.com/mattn/go-sqlite3
+  version: da2bf8a0f356364fb8189a5a276b5acf77839d30
+- name: github.com/onsi/ginkgo
+  version: e57363034d6f4d61cd9ef0b6917f69ad03977914
+  subpackages:
+  - config
+  - internal/codelocation
+  - internal/containernode
+  - internal/failer
+  - internal/leafnodes
+  - internal/remote
+  - internal/spec
+  - internal/specrunner
+  - internal/suite
+  - internal/testingtproxy
+  - internal/writer
+  - reporters
+  - reporters/stenographer
+  - types
+- name: github.com/onsi/gomega
+  version: 982c859aeeffd81ab8717403fb03c379b6c92b5f
+  subpackages:
+  - format
+  - internal/assertion
+  - internal/asyncassertion
+  - internal/testingtsupport
+  - matchers
+  - matchers/support/goraph/bipartitegraph
+  - matchers/support/goraph/edge
+  - matchers/support/goraph/node
+  - matchers/support/goraph/util
+  - types
+testImports: []
