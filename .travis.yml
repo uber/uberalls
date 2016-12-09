@@ -2,15 +2,15 @@
 language: go
 
 go:
-  - 1.4
+  - 1.7
   - tip
 
 before_install:
   - go get -u github.com/axw/gocov/gocov
   - go get -u github.com/mattn/goveralls
   - go get golang.org/x/tools/cmd/cover
-  - go get github.com/tools/godep
-  - godep restore
+  - go get github.com/Masterminds/glide
+  - glide up
 
 script:
   - $HOME/gopath/bin/goveralls -service=travis-ci

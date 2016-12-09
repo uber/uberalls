@@ -1,0 +1,16 @@
+package: github.com/uber/uberalls
+import:
+- package: github.com/go-sql-driver/mysql
+  version: 9543750295406ef070f7de8ae9c43ccddd44e15e
+- package: github.com/jinzhu/gorm
+  version: 52ba1858c31dcbe1573f46f994d3cdf334729ff4
+- package: github.com/lib/pq
+  version: 2fe70547fcfbd6deedadd4af3702af16c0297723
+  subpackages:
+  - hstore
+- package: github.com/mattn/go-sqlite3
+  version: da2bf8a0f356364fb8189a5a276b5acf77839d30
+- package: github.com/onsi/ginkgo
+  version: e57363034d6f4d61cd9ef0b6917f69ad03977914
+- package: github.com/onsi/gomega
+  version: 982c859aeeffd81ab8717403fb03c379b6c92b5f
