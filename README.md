@@ -47,23 +47,27 @@ create a separate job, or enable SCM polling under Build Triggers:
 ## Development
 
 Get the source
+
 ```bash
 go get github.com/uber/uberalls
 ```
 
-Install godeps
+Install Glide and dependencies
+
 ```bash
 cd $GOPATH/src/github.com/uber/uberalls
-go get github.com/tools/godep
-godep restore
+go get github.com/Masterminds/glide
+glide install
 ```
 
 Run the thing
+
 ```bash
 go build && ./uberalls
 ```
 
 Run the tests
+
 ```bash
 go test .
 ```
