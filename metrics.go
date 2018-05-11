@@ -46,6 +46,8 @@ type Metric struct {
 	LineCoverage        float64 `sql:"not null" json:"lineCoverage"`
 	ConditionalCoverage float64 `sql:"not null" json:"conditionalCoverage"`
 	Timestamp           int64   `sql:"not null" json:"timestamp"`
+	LinesCovered        int64   `sql:"" json:"linesCovered"`
+	LinesTested         int64   `sql:"" json:"linesTested"`
 }
 
 type errorResponse struct {
