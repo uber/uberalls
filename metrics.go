@@ -33,7 +33,7 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
-// Metric represents code coverage
+// Metric represents code coverage.
 type Metric struct {
 	ID                  int64   `gorm:"primary_key:yes" json:"id"`
 	Repository          string  `sql:"not null" json:"repository"`
