@@ -26,6 +26,7 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"time"
 
 	"github.com/jinzhu/gorm"
 
@@ -43,11 +44,12 @@ var configLocations = [...]string{
 
 // Config holds application configuration
 type Config struct {
-	DBType        string
-	DBLocation    string
-	ListenPort    int
-	ListenAddress string
-	db            *gorm.DB
+	DBType            string
+	DBLocation        string
+	DBConnMaxLifetime int
+	ListenPort        int
+	ListenAddress     string
+	db                *gorm.DB
 }
 
 // ConnectionString returns a TCP string for the HTTP server to bind to
@@ -63,6 +65,9 @@ func (c *Config) DB() (*gorm.DB, error) {
 			return nil, err
 		}
 		c.db = &newdb
+		if c.DBConnMaxLifetime != 0 {
+			c.db.DB().SetConnMaxLifetime(time.Duration(c.DBConnMaxLifetime) * time.Second)
+		}
 	}
 	return c.db, nil
 }
