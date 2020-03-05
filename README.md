@@ -31,7 +31,7 @@ Uberalls works best when paired with our [Phabricator Jenkins Plugin][], which
 will record Cobertura data on master runs, and compare coverage to the base
 revision on differentials.
 
-![Jenkins Integration](/docs/jenkins-integration.png)
+![Jenkins Integration](https://github.com/Haxandmat/uberalls/docs/jenkins-integration.png)
 
 [Phabricator Jenkins Plugin]: https://github.com/uber/phabricator-jenkins-plugin
 
@@ -42,7 +42,7 @@ In order to have a baseline to compare against, you must also have jenkins build
 your project on your mainline branch ("master" by default). You can either
 create a separate job, or enable SCM polling under Build Triggers:
 
-![scm polling](/docs/scm-polling.png)
+![scm polling](https://github.com/Haxandmat/uberalls/docs/scm-polling.png)
 
 ## Development
 
