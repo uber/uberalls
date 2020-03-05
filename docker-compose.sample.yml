@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+  server:
+    build:
+      context: .
+      args:
+        UID: 1000
+    restart: unless-stopped
+    image: uberalls:latest
+    volumes:
+      - ./volumes:/home/volumes
+    ports:
+      - "3000:3000"

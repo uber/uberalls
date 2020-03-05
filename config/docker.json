@@ -1,0 +1,6 @@
+{
+  "dbType": "sqlite3",
+  "dbLocation": "volumes/db.sqlite",
+  "listenAddress": "0.0.0.0",
+  "listenPort": 3000
+}

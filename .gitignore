@@ -9,3 +9,10 @@ coverage.out
 *.xml
 *.cov
 *.html
+
+docker-compose.yml
+volumes/*
+!**/.keep
+
+.vscode
+__debug_bin
