@@ -8,6 +8,28 @@ and TravisCI.
 [Jenkins]: https://jenkins-ci.org/
 [Coveralls]: https://coveralls.io/
 
+## Docker
+```console
+docker run -p 3000:3000 haxandmat/uberalls:latest
+```
+## ... via [`docker-compose`](https://github.com/docker/compose)
+
+Example `docker-compose.yml` for `uberalls`:
+
+```yaml
+version: '3'
+
+services:
+  server:
+    restart: unless-stopped
+    image: haxandmat/uberalls:latest
+    ports:
+      - "3000:3000"
+
+```
+
+Run `docker-compose up -d`, wait for it to initialize completely, and visit `http://localhost:3000`, or `http://host-ip:3000` (as appropriate).
+
 ## Running
 
 Configure your database by editing `config/default.json` or specify a different
