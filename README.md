@@ -53,7 +53,7 @@ Uberalls works best when paired with our [Phabricator Jenkins Plugin][], which
 will record Cobertura data on master runs, and compare coverage to the base
 revision on differentials.
 
-![Jenkins Integration](https://raw.githubusercontent.com/Haxandmat/master/uberalls/docs/jenkins-integration.png)
+![Jenkins Integration](https://raw.githubusercontent.com/Haxandmat/uberalls/master/docs/jenkins-integration.png)
 
 [Phabricator Jenkins Plugin]: https://github.com/uber/phabricator-jenkins-plugin
 
