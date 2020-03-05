@@ -13,7 +13,7 @@ RUN apk add --no-cache git gcc g++ &&\
 ###########################################
 FROM alpine:3.11
 
-ARG UID
+ARG UID=1000
 
 ENV UBERALLS_CONFIG=/home/docker.json
 
